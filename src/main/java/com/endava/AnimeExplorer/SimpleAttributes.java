@@ -1,4 +1,4 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 
 public class SimpleAttributes {
 

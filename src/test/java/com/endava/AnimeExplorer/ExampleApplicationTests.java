@@ -1,4 +1,4 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

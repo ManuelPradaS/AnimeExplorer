@@ -1,21 +1,14 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.rmi.server.ExportException;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @RestController
 public class RequestController {
@@ -43,11 +36,43 @@ public class RequestController {
 
     String request="?fields[anime]=id,canonicalTitle&filter[episodeCount]=26&filter[genres]=action,adventure&filter[averageRating]=70..100";
 
+
+    ArrayList<String> field =
+            new ArrayList<>(Arrays.asList("id","canonicalTitle"));
+
+    String requieredFields =SearchManager.createRequieredFields(field);
+
+
+    ArrayList<String> words1 =
+            new ArrayList<>(Arrays.asList("action","adventure"));
+
+    String filter1 =
+           SearchManager.createSingleFilter("genres",words1);
+
+    ArrayList<String> words2 =
+            new ArrayList<>(Arrays.asList("26"));
+
+    String filter2 =
+            SearchManager.createSingleFilter("episodeCount",words2);
+
+    ArrayList<String> words3 =
+            new ArrayList<>(Arrays.asList("70..100"));
+
+    String filter3 =
+            SearchManager.createSingleFilter("averageRating",words3);
+
+    ArrayList<String> filters =
+            new ArrayList<>(Arrays.asList(filter1,filter2,filter3));
+
+
+    String request2= SearchManager.makeRequest(requieredFields,filters);
+
     @RequestMapping("/probe")
     public String probe( )throws Exception {
 
         String response=" ";
-          Page currentPage=SearchManager.getPageResults(request);
+          Page currentPage=SearchManager.getPageResults(request2);
+          System.out.println(request2);
         return currentPage.toString();
     }
 

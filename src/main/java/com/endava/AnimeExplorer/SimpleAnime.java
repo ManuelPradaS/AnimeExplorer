@@ -1,11 +1,12 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Data {
+public class SimpleAnime {
     private int id;
-    private String type;
-    private Attributes attributes;
+    private SimpleLinks links;
+    private SimpleAttributes attributes;
 
     public int getId() {
         return id;
@@ -15,31 +16,27 @@ public class Data {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public SimpleLinks getLinks() {
+        return links;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLinks(SimpleLinks links) {
+        this.links = links;
     }
 
-    public Attributes getAttributes() {
+    public SimpleAttributes getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Attributes attributes) {
+    public void setAttributes(SimpleAttributes attributes) {
         this.attributes = attributes;
-    }
-
-    public Data() {
-
     }
 
     @Override
     public String toString() {
-        return "Data{" +
+        return "SimpleAnime{" +
                 "id=" + id +
-                ", type='" + type + '\'' +
+                ", links=" + links +
                 ", attributes=" + attributes +
                 '}';
     }

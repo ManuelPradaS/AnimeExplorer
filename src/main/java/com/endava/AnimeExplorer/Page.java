@@ -1,4 +1,4 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 
 import java.util.Arrays;
 

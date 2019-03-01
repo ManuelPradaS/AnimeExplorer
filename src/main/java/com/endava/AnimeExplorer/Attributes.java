@@ -1,4 +1,4 @@
-package com.endava.example;
+package com.endava.AnimeExplorer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,5 +1,9 @@
 package com.endava.AnimeExplorer.Model.SearchingManager;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,8 +13,41 @@ import java.util.List;
 
 public class SearchManager {
 
-    static final String root = "https://kitsu.io/api/edge/anime";
+    private static final String root = "https://kitsu.io/api/edge/anime";
 
+    private static ArrayList<String> fields = new ArrayList<>(Arrays.asList("id", "canonicalTitle"));
+
+    private static ArrayList<String> streamers = new ArrayList<>(Arrays.asList("Hulu", "Funimation", "Crunchyroll", "Viewster", "Daisuki", "Netflix", "HIDIVE", "TubiTV", "Amazon", "YouTube"));
+    private static ArrayList<String> ageRatings = new ArrayList<>(Arrays.asList("G", "PG", "R", "R18"));
+    private static ArrayList<String> genres;
+
+    public static ArrayList<String> getGenres() {
+        return genres;
+    }
+
+    private static void setGenres(ArrayList<String> genres) {
+        SearchManager.genres = genres;
+    }
+
+    private static String decodeLink(String link) {
+
+        String decodedLink = null;
+        try {
+
+            decodedLink = URLDecoder.decode(link, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+
+            System.err.println(e);
+
+        }
+        return decodedLink;
+    }
+
+    private static boolean anyTrue(boolean[] array) {
+        for (boolean element : array) if (element) return true;
+        return false;
+    }
 
     public static Anime getSingleEntry(int number) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
@@ -73,7 +110,7 @@ public class SearchManager {
 
     }
 
-    public static String createRequiredFields(ArrayList<String> fields) {
+    public static String createRequiredFields() {
 
         String requiredFields = "fields[anime]=";
 
@@ -96,11 +133,13 @@ public class SearchManager {
 
     }
 
-    public static String makeRequest(String fields, ArrayList<String> filters) {
+    public static String makeRequest(ArrayList<String> filters) {
+
+        String requiredFields = SearchManager.createRequiredFields();
 
         String request = "?";
 
-        request = request + fields;
+        request = request + requiredFields;
 
         for (String currentFilter : filters) {
 
@@ -109,26 +148,48 @@ public class SearchManager {
         return request;
     }
 
-    public static String filterByStreamers(Boolean[] streamerChecks) {
-
-        ArrayList<String> streamers =
-                new ArrayList<>(Arrays.asList("Hulu", "Funimation", "Crunchyroll", "Viewster", "Daisuki", "Netflix", "HIDIVE", "TubiTV", "Amazon", "YouTube"));
+    public static String filterBy(String filter, boolean[] checks) {
 
 
-        ArrayList<String> appliedStreamers =
+        ArrayList<String> words =
                 new ArrayList<>();
 
-        for (int i = 0; i < streamers.size(); i++) {
+        switch (filter) {
 
-            if (streamerChecks[i]) {
-                appliedStreamers.add(streamers.get(i));
+            case "streamers": {
+                words = streamers;
+                break;
+            }
+
+            case "genres": {
+                words = genres;
+                break;
+            }
+
+
+            case "ageRatings": {
+                words = ageRatings;
+                break;
+            }
+
+
+        }
+
+
+        ArrayList<String> appliedWords =
+                new ArrayList<>();
+
+        for (int i = 0; i < words.size(); i++) {
+
+            if (checks[i]) {
+                appliedWords.add(words.get(i));
             } else {
             }
         }
 
-        String filterStreamer = createSingleFilter("streamers", appliedStreamers);
+        String filterCategory = createSingleFilter(filter, appliedWords);
 
-        return filterStreamer;
+        return filterCategory;
     }
 
     private static PageGenres getPageGenresResults(String link) {
@@ -138,8 +199,8 @@ public class SearchManager {
 
         HttpHeaders headers = new HttpHeaders();
 
-        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        //headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
         headers.add("Accept", "application/vnd.api+json");
         headers.add("Content-Type", "application/vnd.api+json");
 
@@ -150,82 +211,71 @@ public class SearchManager {
         return genresResult.getBody();
     }
 
-
     private static ArrayList<String> addGenres(ArrayList<String> genresList, String link) {
 
         PageGenres currentPage = getPageGenresResults(link);
 
         for (Genres currentGenre : currentPage.getData()) {
 
-            System.out.println(currentGenre.getAttributes().getName());
             genresList.add(currentGenre.getAttributes().getName());
         }
 
+        String next;
 
+        while (currentPage.getLinks().getNext() != null) {
 
-        String next=currentPage.getLinks().getNext();
-        System.out.println(next);
+            next = decodeLink(currentPage.getLinks().getNext());
+            currentPage = getPageGenresResults(next);
 
-        PageGenres nextPage = getPageGenresResults(next);
-
-        for (Genres currentGenre : nextPage.getData()) {
-
-            System.out.println(currentGenre.getAttributes().getName());
-
+            for (Genres currentGenre : currentPage.getData()) {
+                genresList.add(currentGenre.getAttributes().getName());
+            }
         }
-
-//
-//        PageGenres currentPage = firstPage;
-//
-//        String next=currentPage.getLinks().getNext();
-//
-//        System.out.println(next);
-//
-//
-//
-//        for (Genres currentGenre : getPageGenresResults(next).getData()) {
-//
-//            System.out.println(currentGenre.getAttributes().getName());
-//
-//            genresList.add(currentGenre.getAttributes().getName());
-//
-//        }
-//
-//        String next=currentPage.getLinks().getNext();
-//
-//        while (currentPage.getLinks().getNext() != null) {
-//
-//
-//            currentPage = getPageGenresResults(next);
-//
-//            for (Genres currentGenre : currentPage.getData()) {
-//                  System.out.println(currentGenre.getAttributes().getName());
-//                genresList.add(currentGenre.getAttributes().getName());
-//            }
-//
-//            next=currentPage.getLinks().getNext();
-//
-//        }
-
-
         return genresList;
-
     }
 
-    public static ArrayList<String> getAllGenres() {
+    private static void getAllGenres() {
 
         ArrayList<String> emptyList = new
                 ArrayList<>();
 
         String link = "https://kitsu.io/api/edge/genres";
 
-//        link="https://kitsu.io/api/edge/genres?page%5Blimit%5D=10&page%5Boffset%5D=10";
+        setGenres(addGenres(emptyList, link));
 
-        ArrayList<String> genresList = addGenres(emptyList, link);
+    }
 
-        return genresList;
+    public static Page requestSearch(boolean[] streamerChecks, boolean[] ageRatingChecks, boolean[] genreChecks) throws Exception{
+
+        boolean filterByStreamer=anyTrue(streamerChecks);
+        boolean filterByAgeRating=anyTrue(ageRatingChecks);
+        boolean filterByGenre=anyTrue(genreChecks);
+
+        ArrayList<String> filters =
+                new ArrayList<>();
+
+        if (filterByStreamer){
+           filters.add(SearchManager.filterBy("streamers", streamerChecks));
+        }
+        if (filterByAgeRating){
+            filters.add(SearchManager.filterBy("ageRatings", ageRatingChecks));
+        }
+        if (filterByGenre){
+            filters.add(SearchManager.filterBy("genres", genreChecks));
+        }
+
+        String searchPage = SearchManager.makeRequest(filters);
+
+        System.out.println(searchPage);
+        Page resultPage=SearchManager.getPageResults(searchPage);
+
+        return resultPage;
+    }
 
 
+    public static void init() {
+
+        getAllGenres();
     }
 
 

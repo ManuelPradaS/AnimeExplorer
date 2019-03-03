@@ -37,7 +37,6 @@ public class ExampleApplication {
 
 	}
 
-
 	private static final Logger log = LoggerFactory.getLogger(ExampleApplication.class);
 
 	@Bean
@@ -50,6 +49,7 @@ public class ExampleApplication {
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
 
+			SearchManager.init();
 			System.out.println("Ready");
 		};
 	}

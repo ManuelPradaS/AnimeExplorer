@@ -1,19 +1,19 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 
 import java.util.Arrays;
 
 public class Page {
 
-    private SimpleAnime[] data;
+    private AnimeSingle[] data;
     private Meta meta;
     private Links links;
 
 
-    public SimpleAnime[] getData() {
+    public AnimeSingle[] getData() {
         return data;
     }
 
-    public void setData(SimpleAnime[] data) {
+    public void setData(AnimeSingle[] data) {
         this.data = data;
     }
 

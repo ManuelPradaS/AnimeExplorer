@@ -1,11 +1,13 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Data {
+public class AnimeSingle {
+
     private int id;
-    private String type;
-    private Attributes attributes;
+    private LinksSingle links;
+    private AttributesSingle attributes;
 
     public int getId() {
         return id;
@@ -15,31 +17,27 @@ public class Data {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public LinksSingle getLinks() {
+        return links;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLinks(LinksSingle links) {
+        this.links = links;
     }
 
-    public Attributes getAttributes() {
+    public AttributesSingle getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Attributes attributes) {
+    public void setAttributes(AttributesSingle attributes) {
         this.attributes = attributes;
-    }
-
-    public Data() {
-
     }
 
     @Override
     public String toString() {
-        return "Data{" +
+        return "AnimeSingle{" +
                 "id=" + id +
-                ", type='" + type + '\'' +
+                ", links=" + links +
                 ", attributes=" + attributes +
                 '}';
     }

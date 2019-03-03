@@ -1,4 +1,4 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -8,6 +8,16 @@ public class Attributes {
     private String slug;
     private String synopsis;
     private String canonicalTitle;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getCreatedAt() {
         return createdAt;
@@ -61,6 +71,7 @@ public class Attributes {
                 ", slug='" + slug + '\'' +
                 ", synopsis='" + synopsis + '\'' +
                 ", canonicalTitle='" + canonicalTitle + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

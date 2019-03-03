@@ -1,6 +1,6 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 
-public class SimpleLinks {
+public class LinksSingle {
 
     private String self;
 
@@ -15,7 +15,7 @@ public class SimpleLinks {
 
     @Override
     public String toString() {
-        return "SimpleLinks{" +
+        return "LinksSingle{" +
                 "self='" + self + '\'' +
                 '}';
     }

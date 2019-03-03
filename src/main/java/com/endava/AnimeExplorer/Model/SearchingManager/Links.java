@@ -1,4 +1,4 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -6,6 +6,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Links {
 
     private String next;
+    private String last;
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
 
     public String getNext() {
         return next;
@@ -19,6 +28,7 @@ public class Links {
     public String toString() {
         return "Links{" +
                 "next='" + next + '\'' +
+                ", last='" + last + '\'' +
                 '}';
     }
 }

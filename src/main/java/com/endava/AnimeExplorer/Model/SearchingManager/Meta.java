@@ -1,4 +1,4 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 

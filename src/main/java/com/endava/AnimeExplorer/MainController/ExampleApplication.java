@@ -1,6 +1,8 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.MainController;
 
 
+import com.endava.AnimeExplorer.Model.SearchingManager.Anime;
+import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -47,8 +49,8 @@ public class ExampleApplication {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
-			animes=SearchManager.getAllAnimes();
-			System.out.println("done");
+
+			System.out.println("Ready");
 		};
 	}
 

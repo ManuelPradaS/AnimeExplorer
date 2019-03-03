@@ -1,6 +1,6 @@
-package com.endava.AnimeExplorer;
+package com.endava.AnimeExplorer.Model.SearchingManager;
 
-public class SimpleAttributes {
+public class AttributesSingle {
 
     private String canonicalTitle;
 
@@ -13,14 +13,14 @@ public class SimpleAttributes {
         this.canonicalTitle = canonicalTitle;
     }
 
-    public SimpleAttributes() {
+    public AttributesSingle() {
 
     }
 
 
     @Override
     public String toString() {
-        return "SimpleAttributes{" +
+        return "AttributesSingle{" +
                 "canonicalTitle='" + canonicalTitle + '\'' +
                 '}';
     }

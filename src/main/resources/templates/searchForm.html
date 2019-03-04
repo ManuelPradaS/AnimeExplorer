@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Animes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+	    	.error { color: red; font-size: 0.9em; font-weight: bold; }
+	</style>
+</head>
+<body>
+<p th:text="'Hello, Bud! select the filters that you want'" />
+
+<form action="#" th:action="@{/searchForm}" th:object="${command}" method="post">
+
+
+    <p>Streamers:</p>
+    <ul>
+        <li th:each="checkboxValue: ${streamers}">
+            <input type="checkbox" th:field="*{streamers}" th:value="${checkboxValue}" />
+            <label th:for="${#ids.prev('streamers')}" th:text="${checkboxValue}"></label>
+        </li>
+    </ul>
+
+    <p>AgeRatings:</p>
+    <ul>
+        <li th:each="checkboxValue: ${ageRatings}">
+            <input type="checkbox" th:field="*{ageRatings}" th:value="${checkboxValue}" />
+            <label th:for="${#ids.prev('ageRatings')}" th:text="${checkboxValue}"></label>
+        </li>
+    </ul>
+
+
+    <p>Genres:</p>
+    <ul>
+        <li th:each="checkboxValue: ${genres}">
+            <input type="checkbox" th:field="*{genres}" th:value="${checkboxValue}" />
+            <label th:for="${#ids.prev('genres')}" th:text="${checkboxValue}"></label>
+        </li>
+    </ul>
+
+
+
+
+
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /> </p>
+</form>
+</body>
+</html>

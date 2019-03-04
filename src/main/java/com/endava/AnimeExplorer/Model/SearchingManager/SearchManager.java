@@ -253,23 +253,28 @@ public class SearchManager {
 
     }
 
-    public static Page requestSearch(boolean[] streamerChecks, boolean[] ageRatingChecks, boolean[] genreChecks) throws Exception{
+    public static Page requestSearch(String[] streamerChecksArray,String[] ageRatingChecksArray,String[] genreChecksArray) throws Exception{
 
-        boolean filterByStreamer=anyTrue(streamerChecks);
-        boolean filterByAgeRating=anyTrue(ageRatingChecks);
-        boolean filterByGenre=anyTrue(genreChecks);
+        List<String> streamerChecks = Arrays.asList( streamerChecksArray );
+        List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
+        List<String> genreChecks = Arrays.asList( genreChecksArray );
+
+
+        boolean filterByStreamer=streamerChecks.size()<0;
+        boolean filterByAgeRating=ageRatingChecks.size()<0;
+        boolean filterByGenre=genreChecks.size()<0;
 
         ArrayList<String> filters =
                 new ArrayList<>();
 
         if (filterByStreamer){
-           filters.add(SearchManager.filterBy("streamers", streamerChecks));
+           filters.add(SearchManager.createSingleFilter("streamers", streamerChecks));
         }
         if (filterByAgeRating){
-            filters.add(SearchManager.filterBy("ageRatings", ageRatingChecks));
+            filters.add(SearchManager.createSingleFilter("ageRatings", ageRatingChecks));
         }
         if (filterByGenre){
-            filters.add(SearchManager.filterBy("genres", genreChecks));
+            filters.add(SearchManager.createSingleFilter("genres", genreChecks));
         }
 
         String searchPage = SearchManager.makeRequest(filters);

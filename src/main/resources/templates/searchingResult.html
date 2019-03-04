@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Searching Result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'These are the animes'" />
+
+
+<p th:text= "'Streamers selected: ' + ${#strings.arrayJoin(command.streamers, ', ')}" />
+
+<p th:text= "'AgeRating selected: ' + ${#strings.arrayJoin(command.ageRatings, ', ')}" />
+
+<p th:text= "'Genres selected: ' + ${#strings.arrayJoin(command.genres, ', ')}" />
+
+
+<a href="/searchForm">resubmit form</a>
+</body>
+</html>

@@ -29,6 +29,14 @@ public class SearchManager {
         SearchManager.genres = genres;
     }
 
+    public static ArrayList<String> getStreamers() {
+        return streamers;
+    }
+
+    public static ArrayList<String> getAgeRatings() {
+        return ageRatings;
+    }
+
     private static String decodeLink(String link) {
 
         String decodedLink = null;

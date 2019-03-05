@@ -14,6 +14,9 @@
 
 <p th:text= "'Genres selected: ' + ${#strings.arrayJoin(command.genres, ', ')}" />
 
+<p th:text= "'Results ' + ${#strings.arrayJoin(results, ', ')}" />
+
+
 
 <a href="/searchForm">resubmit form</a>
 </body>

@@ -4,7 +4,6 @@ public class AttributesSingle {
 
     private String canonicalTitle;
 
-
     public String getCanonicalTitle() {
         return canonicalTitle;
     }

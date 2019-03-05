@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,6 +38,8 @@ public class SearchManager {
         return ageRatings;
     }
 
+
+
     private static String decodeLink(String link) {
 
         String decodedLink = null;
@@ -56,6 +59,7 @@ public class SearchManager {
         for (boolean element : array) if (element) return true;
         return false;
     }
+
 
     public static Anime getSingleEntry(int number) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
@@ -89,13 +93,15 @@ public class SearchManager {
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
         String link = root + request;
+        System.out.println(link);
 
         ResponseEntity<Page> pageResult = restTemplate.exchange(link, HttpMethod.GET, entity, Page.class);
 
         return pageResult.getBody();
     }
 
-    public static String createSingleFilter(String filter, List<String> words) {
+
+    private static String createSingleFilter(String filter, List<String> words) {
 
         String singleFilter = "filter" + "[" + filter + "]" + "=";
 
@@ -118,7 +124,7 @@ public class SearchManager {
 
     }
 
-    public static String createRequiredFields() {
+    private static String createRequiredFields() {
 
         String requiredFields = "fields[anime]=";
 
@@ -141,7 +147,7 @@ public class SearchManager {
 
     }
 
-    public static String makeRequest(ArrayList<String> filters) {
+    private static String makeRequest(ArrayList<String> filters) {
 
         String requiredFields = SearchManager.createRequiredFields();
 
@@ -154,50 +160,6 @@ public class SearchManager {
             request = request + "&" + currentFilter;
         }
         return request;
-    }
-
-    public static String filterBy(String filter, boolean[] checks) {
-
-
-        ArrayList<String> words =
-                new ArrayList<>();
-
-        switch (filter) {
-
-            case "streamers": {
-                words = streamers;
-                break;
-            }
-
-            case "genres": {
-                words = genres;
-                break;
-            }
-
-
-            case "ageRatings": {
-                words = ageRatings;
-                break;
-            }
-
-
-        }
-
-
-        ArrayList<String> appliedWords =
-                new ArrayList<>();
-
-        for (int i = 0; i < words.size(); i++) {
-
-            if (checks[i]) {
-                appliedWords.add(words.get(i));
-            } else {
-            }
-        }
-
-        String filterCategory = createSingleFilter(filter, appliedWords);
-
-        return filterCategory;
     }
 
     private static PageGenres getPageGenresResults(String link) {
@@ -253,16 +215,16 @@ public class SearchManager {
 
     }
 
-    public static Page requestSearch(String[] streamerChecksArray,String[] ageRatingChecksArray,String[] genreChecksArray) throws Exception{
+    public static String requestSearch(String[] streamerChecksArray, String[] ageRatingChecksArray, String[] genreChecksArray) throws Exception{
 
         List<String> streamerChecks = Arrays.asList( streamerChecksArray );
         List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
         List<String> genreChecks = Arrays.asList( genreChecksArray );
 
 
-        boolean filterByStreamer=streamerChecks.size()<0;
-        boolean filterByAgeRating=ageRatingChecks.size()<0;
-        boolean filterByGenre=genreChecks.size()<0;
+        boolean filterByStreamer=streamerChecks.size()>0;
+        boolean filterByAgeRating=ageRatingChecks.size()>0;
+        boolean filterByGenre=genreChecks.size()>0;
 
         ArrayList<String> filters =
                 new ArrayList<>();
@@ -270,7 +232,7 @@ public class SearchManager {
         if (filterByStreamer){
            filters.add(SearchManager.createSingleFilter("streamers", streamerChecks));
         }
-        if (filterByAgeRating){
+        if (false){
             filters.add(SearchManager.createSingleFilter("ageRatings", ageRatingChecks));
         }
         if (filterByGenre){
@@ -279,10 +241,7 @@ public class SearchManager {
 
         String searchPage = SearchManager.makeRequest(filters);
 
-        System.out.println(searchPage);
-        Page resultPage=SearchManager.getPageResults(searchPage);
-
-        return resultPage;
+        return searchPage;
     }
 
 

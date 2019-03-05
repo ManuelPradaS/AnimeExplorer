@@ -1,7 +1,8 @@
 package com.endava.AnimeExplorer.MainController;
 
-import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
+import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
+import com.endava.AnimeExplorer.Model.SearchingManager.AnimeSingle;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +48,7 @@ public class GetController {
         return "searchForm";
     }
 
-
-    Page resultPage;
+    Page prueba;
 
     @PostMapping("/searchForm")
     public String formPost(
@@ -61,23 +61,41 @@ public class GetController {
 
 
 
+        String request=SearchManager.requestSearch(command.getStreamers(),command.getAgeRatings(),command.getGenres());
+        System.out.println(request);
+
+        prueba=SearchManager.getPageResults(request);
+        System.out.println(prueba.getMeta().getCount());
+
+
+        String[] resultsNames=new String[prueba.getData().length];
+
+        for (int i=0;i<resultsNames.length;i++){
+            resultsNames[i]=prueba.getData()[i].getAttributes().getCanonicalTitle();
+            System.out.println(resultsNames[i]);
+        }
+
+
+
+
         if ( bindingResult.hasErrors() ) {
             return "searchForm";
         }
 
         ra.addFlashAttribute("command", command);
 
+
         return "redirect:/searchingResult";
     }
 
     @GetMapping("/searchingResult")
-    public String fooresult(
-            @ModelAttribute("command") FormCommand command,
-            Model model)  {
+    public String foormResult(
+            @ModelAttribute("command") FormCommand command, Model model)  {
 
     return "searchingResult";
 
     }
+
 
 
 }

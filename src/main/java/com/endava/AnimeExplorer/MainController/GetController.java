@@ -1,6 +1,5 @@
 package com.endava.AnimeExplorer.MainController;
 
-import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

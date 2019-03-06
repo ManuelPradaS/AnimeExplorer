@@ -1,8 +1,6 @@
-package com.endava.AnimeExplorer.MainController;
+package com.endava.AnimeExplorer;
 
 
-import com.endava.AnimeExplorer.Model.SearchingManager.Anime;
-import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -12,12 +10,11 @@ import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import java.util.*;
 
 
 @SpringBootApplication
 @ComponentScan({"com.endava.AnimeExplorer"})
-public class ExampleApplication {
+public class AnimeExplorer {
 
 	public static Logger getLog() {
 		return log;
@@ -25,11 +22,11 @@ public class ExampleApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(ExampleApplication.class, args);
+		SpringApplication.run(AnimeExplorer.class, args);
 
 	}
 
-	private static final Logger log = LoggerFactory.getLogger(ExampleApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(AnimeExplorer.class);
 
 	@Bean
 	public static RestTemplate restTemplate(RestTemplateBuilder builder) {

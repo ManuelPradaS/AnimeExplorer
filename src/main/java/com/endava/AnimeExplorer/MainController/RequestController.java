@@ -3,6 +3,7 @@ package com.endava.AnimeExplorer.MainController;
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.UserManager.User;
+import com.endava.AnimeExplorer.Model.UserManager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,10 +18,12 @@ public class RequestController {
 
 
     private SearchManager searchManager;
+    private UserManager userManager;
 
     @Autowired
-    public RequestController(SearchManager searchManager) {
+    public RequestController(SearchManager searchManager,UserManager userManager) {
         this.searchManager = searchManager;
+        this.userManager= userManager;
     }
 
 
@@ -44,9 +47,9 @@ public class RequestController {
 
 
     @PostMapping(path="/createUser", consumes = "application/json", produces = "application/json")
-    public User formPost(@RequestBody User newUser){
+    public User addUser(@RequestBody User newUser){
 
-        return newUser;
+        return userManager.addUser(newUser);
     }
 }
 

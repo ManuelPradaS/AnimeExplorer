@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     @Id
+    @GeneratedValue
     private int userId;
 
     @NotNull
@@ -23,4 +25,7 @@ public class User {
     @NotNull
     private String password;
 
+    public String getUser() {
+        return user;
+    }
 }

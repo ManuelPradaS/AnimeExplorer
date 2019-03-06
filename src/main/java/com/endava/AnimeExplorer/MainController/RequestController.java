@@ -2,10 +2,12 @@ package com.endava.AnimeExplorer.MainController;
 
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
+import com.endava.AnimeExplorer.Model.UserManager.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 
@@ -37,8 +39,14 @@ public class RequestController {
 
         System.out.println(Arrays.toString(genres));
 
+        return searchManager.requestSearch(streamers,genres);
+    }
 
-        return searchManager.requestSearch(streamers,genres) ;
+
+    @PostMapping(path="/createUser", consumes = "application/json", produces = "application/json")
+    public User formPost(@RequestBody User newUser){
+
+        return newUser;
     }
 }
 

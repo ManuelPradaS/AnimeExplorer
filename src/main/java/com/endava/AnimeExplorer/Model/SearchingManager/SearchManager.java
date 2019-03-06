@@ -236,9 +236,10 @@ public class SearchManager {
 
        // List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
 
-        boolean filterByStreamer= streamerChecksArray.length >0;
+        boolean filterByStreamer=streamerChecksArray!=null && streamerChecksArray.length >0;
         //boolean filterByAgeRating=ageRatingChecks.size()>0;
-        boolean filterByGenre=genreChecksArray.length >0;
+
+        boolean filterByGenre=genreChecksArray!=null && genreChecksArray.length >0;
 
         ArrayList<String> filters =
                 new ArrayList<>();

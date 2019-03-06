@@ -55,6 +55,22 @@ public class SearchManager {
         return decodedLink;
     }
 
+    public static String encodeLink(String link) {
+
+        String encodedLink = null;
+        try {
+
+            encodedLink = URLEncoder.encode(link, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+
+            System.err.println(e);
+
+        }
+        return encodedLink;
+    }
+
+
     private static boolean anyTrue(boolean[] array) {
         for (boolean element : array) if (element) return true;
         return false;
@@ -215,33 +231,36 @@ public class SearchManager {
 
     }
 
-    public static String requestSearch(String[] streamerChecksArray, String[] ageRatingChecksArray, String[] genreChecksArray) throws Exception{
+    public static Page requestSearch(String[] streamerChecksArray, String[] genreChecksArray) throws Exception{
 
-        List<String> streamerChecks = Arrays.asList( streamerChecksArray );
-        List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
-        List<String> genreChecks = Arrays.asList( genreChecksArray );
+        // String[] ageRatingChecksArray
 
+       // List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
 
-        boolean filterByStreamer=streamerChecks.size()>0;
-        boolean filterByAgeRating=ageRatingChecks.size()>0;
-        boolean filterByGenre=genreChecks.size()>0;
+        boolean filterByStreamer= streamerChecksArray.length >0;
+        //boolean filterByAgeRating=ageRatingChecks.size()>0;
+        boolean filterByGenre=genreChecksArray.length >0;
 
         ArrayList<String> filters =
                 new ArrayList<>();
 
         if (filterByStreamer){
+            List<String> streamerChecks = Arrays.asList(streamerChecksArray);
            filters.add(SearchManager.createSingleFilter("streamers", streamerChecks));
         }
-        if (false){
-            filters.add(SearchManager.createSingleFilter("ageRatings", ageRatingChecks));
-        }
+//        if (false){
+//            filters.add(SearchManager.createSingleFilter("ageRatings", ageRatingChecks));
+//        }
         if (filterByGenre){
+            List<String> genreChecks = Arrays.asList(genreChecksArray);
             filters.add(SearchManager.createSingleFilter("genres", genreChecks));
         }
 
         String searchPage = SearchManager.makeRequest(filters);
 
-        return searchPage;
+        Page result =SearchManager.getPageResults(searchPage);
+
+        return result;
     }
 
 

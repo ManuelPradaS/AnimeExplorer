@@ -12,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
+
 
 @Controller
 public class GetController {
@@ -43,7 +45,7 @@ public class GetController {
 
     @GetMapping("/searchForm")
     public String form(Model model) {
-        model.addAttribute( "command", new FormCommand());
+        model.addAttribute("command", new FormCommand());
 
         return "searchForm";
     }
@@ -57,45 +59,46 @@ public class GetController {
             // https://stackoverflow.com/a/29883178/1626026
             BindingResult bindingResult,
             Model model,
-            RedirectAttributes ra ) throws Exception{
+            RedirectAttributes ra) throws Exception {
 
 
+        String str=Arrays.toString(command.getStreamers())
+                .replace("[", "")  //remove the right bracket
+                .replace("]", "")  //remove the left bracket
+                .trim();
 
-        String request=SearchManager.requestSearch(command.getStreamers(),command.getAgeRatings(),command.getGenres());
-        System.out.println(request);
+        String gen=Arrays.toString(command.getGenres())
+                .replace("[", "")  //remove the right bracket
+                .replace("]", "")  //remove the left bracket
+                .trim();
 
-        prueba=SearchManager.getPageResults(request);
-        System.out.println(prueba.getMeta().getCount());
-
-
-        String[] resultsNames=new String[prueba.getData().length];
-
-        for (int i=0;i<resultsNames.length;i++){
-            resultsNames[i]=prueba.getData()[i].getAttributes().getCanonicalTitle();
-            System.out.println(resultsNames[i]);
-        }
+        String request = "?"+"streamers=" +str  + "&" + "genres=" + gen;
 
 
+        String encodedRequest = "?" + SearchManager.encodeLink(request);
+
+        String finalResult=encodedRequest.replace(" ", "").trim();
+
+     //   System.out.println(request);
+//        System.out.println(encodedRequest);
 
 
-        if ( bindingResult.hasErrors() ) {
+        if (bindingResult.hasErrors()) {
             return "searchForm";
         }
 
         ra.addFlashAttribute("command", command);
-
 
         return "redirect:/searchingResult";
     }
 
     @GetMapping("/searchingResult")
     public String foormResult(
-            @ModelAttribute("command") FormCommand command, Model model)  {
+            @ModelAttribute("command") FormCommand command, Model model) {
 
-    return "searchingResult";
+        return "searchingResult";
 
     }
-
 
 
 }

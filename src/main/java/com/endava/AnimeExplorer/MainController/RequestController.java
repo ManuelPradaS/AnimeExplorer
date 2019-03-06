@@ -5,6 +5,7 @@ import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.UserManager.User;
 import com.endava.AnimeExplorer.Model.UserManager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -47,10 +48,18 @@ public class RequestController {
 
 
     @PostMapping(path="/createUser", consumes = "application/json", produces = "application/json")
-    public User addUser(@RequestBody User newUser){
+    public ResponseEntity<User> addUser(@RequestBody User newUser){
 
         return userManager.addUser(newUser);
     }
+
+
+    @PostMapping(path="/log", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<User> logUser(@RequestBody User newUser){
+
+        return userManager.logUser(newUser);
+    }
+
 }
 
 

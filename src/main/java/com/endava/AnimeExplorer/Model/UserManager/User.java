@@ -28,4 +28,8 @@ public class User {
     public String getUser() {
         return user;
     }
+
+    public String getPassword() {
+        return password;
+    }
 }

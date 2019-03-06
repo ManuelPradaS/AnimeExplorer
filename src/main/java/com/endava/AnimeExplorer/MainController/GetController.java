@@ -2,7 +2,7 @@ package com.endava.AnimeExplorer.MainController;
 
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
-import com.endava.AnimeExplorer.Model.SearchingManager.AnimeSingle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +12,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-
-import static com.endava.AnimeExplorer.Model.SearchingManager.SearchManager.internalRequest;
-
-
 @Controller
 public class GetController {
+
+    private SearchManager searchManager;
+
+    @Autowired
+    public GetController(SearchManager searchManager) {
+        this.searchManager = searchManager;
+        searchManager.init();
+    }
+
 
     @ModelAttribute("genres")
     public String[] getGenres() {
 
-        String[] genresArray = SearchManager.getGenres().stream()
+        String[] genresArray = searchManager.getGenres().stream()
                 .toArray(String[]::new);
         return genresArray;
     }
@@ -31,7 +35,7 @@ public class GetController {
     @ModelAttribute("streamers")
     public String[] getStreamers() {
 
-        String[] streamersArray = SearchManager.getStreamers().stream()
+        String[] streamersArray = searchManager.getStreamers().stream()
                 .toArray(String[]::new);
         return streamersArray;
     }
@@ -39,7 +43,7 @@ public class GetController {
     @ModelAttribute("ageRatings")
     public String[] getAgeRatings() {
 
-        String[] ageRatingsArray = SearchManager.getAgeRatings().stream()
+        String[] ageRatingsArray = searchManager.getAgeRatings().stream()
                 .toArray(String[]::new);
         return ageRatingsArray;
     }
@@ -52,7 +56,6 @@ public class GetController {
         return "searchForm";
     }
 
-    Page prueba;
 
     @PostMapping("/searchForm")
     public String formPost(
@@ -64,7 +67,7 @@ public class GetController {
             RedirectAttributes ra) throws Exception {
 
 
-        String request = SearchManager.internalRequest(command.getStreamers(), command.getGenres());
+        String request = searchManager.internalRequest(command.getStreamers(), command.getGenres());
         System.out.println(request+"<-----");
 
         if (bindingResult.hasErrors()) {
@@ -72,8 +75,6 @@ public class GetController {
         }
 
         ra.addFlashAttribute("command", command);
-
-
 
 
         return "redirect:/search"+request;

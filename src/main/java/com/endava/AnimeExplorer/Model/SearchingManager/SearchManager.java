@@ -6,12 +6,14 @@ import java.net.URLEncoder;
 
 import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class SearchManager {
 
     private static final String root = "https://kitsu.io/api/edge/anime";
@@ -263,6 +265,38 @@ public class SearchManager {
         return result;
     }
 
+
+    public static String internalRequest(String[] streamerChecksArray, String[] genreChecksArray) throws Exception{
+
+
+        String streamersElements=getElements(streamerChecksArray);
+        String genresElements=getElements(genreChecksArray);
+
+        String request = "?"+"streamers=" +streamersElements  + "&" + "genres=" + genresElements;
+
+        //String encodedRequest = "?" + SearchManager.encodeLink(request);
+
+        return request;
+    }
+
+
+    private static String getElements(String[] stringArray){
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i <stringArray.length ; i++) {
+            String value=stringArray[i];
+            if(i==stringArray.length-1){
+                builder.append(value);
+            }
+            else{
+                builder.append(value);
+                builder.append(",");
+            }
+        }
+        String elements = builder.toString();
+        return elements;
+    }
 
     public static void init() {
 

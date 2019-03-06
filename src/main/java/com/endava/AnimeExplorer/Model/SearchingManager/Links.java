@@ -24,11 +24,5 @@ public class Links {
         this.next = next;
     }
 
-    @Override
-    public String toString() {
-        return "Links{" +
-                "next='" + next + '\'' +
-                ", last='" + last + '\'' +
-                '}';
-    }
+
 }

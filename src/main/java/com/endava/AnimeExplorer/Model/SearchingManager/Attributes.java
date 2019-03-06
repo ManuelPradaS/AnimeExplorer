@@ -63,15 +63,5 @@ public class Attributes {
 
     }
 
-    @Override
-    public String toString() {
-        return "Attributes{" +
-                "createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                ", slug='" + slug + '\'' +
-                ", synopsis='" + synopsis + '\'' +
-                ", canonicalTitle='" + canonicalTitle + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
+
 }

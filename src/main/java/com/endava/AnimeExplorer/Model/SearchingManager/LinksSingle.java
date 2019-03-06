@@ -13,10 +13,4 @@ public class LinksSingle {
     }
 
 
-    @Override
-    public String toString() {
-        return "LinksSingle{" +
-                "self='" + self + '\'' +
-                '}';
-    }
 }

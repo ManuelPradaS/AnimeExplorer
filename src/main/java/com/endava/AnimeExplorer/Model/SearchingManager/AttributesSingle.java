@@ -17,10 +17,5 @@ public class AttributesSingle {
     }
 
 
-    @Override
-    public String toString() {
-        return "AttributesSingle{" +
-                "canonicalTitle='" + canonicalTitle + '\'' +
-                '}';
-    }
+
 }

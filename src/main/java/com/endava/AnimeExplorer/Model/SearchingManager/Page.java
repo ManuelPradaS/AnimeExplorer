@@ -33,12 +33,5 @@ public class Page {
         this.links = links;
     }
 
-    @Override
-    public String toString() {
-        return "Page{" +
-                "data=" + Arrays.toString(data) +
-                ", meta=" + meta +
-                ", links=" + links +
-                '}';
-    }
+
 }

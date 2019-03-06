@@ -14,10 +14,5 @@ public class Meta {
         this.count = count;
     }
 
-    @Override
-    public String toString() {
-        return "Meta{" +
-                "count=" + count +
-                '}';
-    }
+
 }

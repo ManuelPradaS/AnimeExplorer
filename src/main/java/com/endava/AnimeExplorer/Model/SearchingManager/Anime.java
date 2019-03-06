@@ -17,10 +17,6 @@ public class Anime {
 
     }
 
-    @Override
-    public String toString() {
-        return "Anime{" +
-                "data=" + data +
-                '}';
-    }
+
+
 }

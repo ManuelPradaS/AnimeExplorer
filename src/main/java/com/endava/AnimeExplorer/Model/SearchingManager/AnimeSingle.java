@@ -33,12 +33,5 @@ public class AnimeSingle {
         this.attributes = attributes;
     }
 
-    @Override
-    public String toString() {
-        return "AnimeSingle{" +
-                "id=" + id +
-                ", links=" + links +
-                ", attributes=" + attributes +
-                '}';
-    }
+
 }

@@ -35,12 +35,5 @@ public class Data {
 
     }
 
-    @Override
-    public String toString() {
-        return "Data{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", attributes=" + attributes +
-                '}';
-    }
+
 }

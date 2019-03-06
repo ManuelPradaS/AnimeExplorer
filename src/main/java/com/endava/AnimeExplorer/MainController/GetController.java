@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 
+import static com.endava.AnimeExplorer.Model.SearchingManager.SearchManager.internalRequest;
+
 
 @Controller
 public class GetController {
@@ -62,26 +64,8 @@ public class GetController {
             RedirectAttributes ra) throws Exception {
 
 
-        String str=Arrays.toString(command.getStreamers())
-                .replace("[", "")  //remove the right bracket
-                .replace("]", "")  //remove the left bracket
-                .trim();
-
-        String gen=Arrays.toString(command.getGenres())
-                .replace("[", "")  //remove the right bracket
-                .replace("]", "")  //remove the left bracket
-                .trim();
-
-        String request = "?"+"streamers=" +str  + "&" + "genres=" + gen;
-
-
-        String encodedRequest = "?" + SearchManager.encodeLink(request);
-
-        String finalResult=encodedRequest.replace(" ", "").trim();
-
-     //   System.out.println(request);
-//        System.out.println(encodedRequest);
-
+        String request = SearchManager.internalRequest(command.getStreamers(), command.getGenres());
+        System.out.println(request+"<-----");
 
         if (bindingResult.hasErrors()) {
             return "searchForm";
@@ -89,7 +73,10 @@ public class GetController {
 
         ra.addFlashAttribute("command", command);
 
-        return "redirect:/searchingResult";
+
+
+
+        return "redirect:/search"+request;
     }
 
     @GetMapping("/searchingResult")

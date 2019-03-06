@@ -18,9 +18,5 @@ public class GenresAttribute {
 
     }
 
-    @Override
-    public String toString() {
-        return
-                 name + "____/" ;
-    }
+
 }

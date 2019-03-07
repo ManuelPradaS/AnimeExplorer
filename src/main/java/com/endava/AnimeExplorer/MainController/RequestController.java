@@ -2,7 +2,9 @@ package com.endava.AnimeExplorer.MainController;
 
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
+import com.endava.AnimeExplorer.Model.UserManager.ProfileInformation;
 import com.endava.AnimeExplorer.Model.UserManager.User;
+import com.endava.AnimeExplorer.Model.UserManager.UserLogin;
 import com.endava.AnimeExplorer.Model.UserManager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,9 @@ public class RequestController {
     private UserManager userManager;
 
     @Autowired
-    public RequestController(SearchManager searchManager,UserManager userManager) {
+    public RequestController(SearchManager searchManager, UserManager userManager) {
         this.searchManager = searchManager;
-        this.userManager= userManager;
+        this.userManager = userManager;
     }
 
 
@@ -35,37 +37,50 @@ public class RequestController {
     }
 
     @RequestMapping("/search")
-    public Page search(@RequestParam(value = "streamers",required = false) String[] streamers,
-                       @RequestParam(value = "genres",required = false) String[] genres)throws  Exception{
+    public Page search(@RequestParam(value = "streamers", required = false) String[] streamers,
+                       @RequestParam(value = "genres", required = false) String[] genres) throws Exception {
 
 
         System.out.println(Arrays.toString(streamers));
 
         System.out.println(Arrays.toString(genres));
 
-        return searchManager.requestSearch(streamers,genres);
+        return searchManager.requestSearch(streamers, genres);
     }
 
 
-    @PostMapping(path="/createUser", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<User> addUser(@RequestBody User newUser){
+    @PostMapping(path = "/createUser", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<User> addUser(@RequestBody UserLogin newUser) {
 
         return userManager.addUser(newUser);
     }
 
 
-    @PostMapping(path="/logIn", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<User> logUser(@RequestBody User newUser){
+    @PostMapping(path = "/logIn", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserLogin> logUser(@RequestBody UserLogin currentUser) {
 
-        return userManager.logUser(newUser);
+        return userManager.logUser(currentUser);
     }
 
-    @PostMapping(path="/logOut")
-    public String logOut(){
+    @PostMapping(path = "/logOut")
+    public String logOut() {
 
         return userManager.logOut();
     }
 
+    @PostMapping(path = "/updateInformation", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String>
+    updateInformation(@RequestBody ProfileInformation currentInformation) {
+
+        return userManager.updateInformation(currentInformation,userManager.getCurrentState().getUserId());
+    }
+
+    @GetMapping(path = "/profile", produces = "application/json")
+    public ResponseEntity<ProfileInformation>
+    viewProfile() {
+
+        return userManager.viewProfile(userManager.getCurrentState().getUserId());
+    }
 
 }
 

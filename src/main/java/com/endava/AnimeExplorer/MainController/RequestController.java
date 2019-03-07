@@ -54,11 +54,18 @@ public class RequestController {
     }
 
 
-    @PostMapping(path="/log", consumes = "application/json", produces = "application/json")
+    @PostMapping(path="/logIn", consumes = "application/json", produces = "application/json")
     public ResponseEntity<User> logUser(@RequestBody User newUser){
 
         return userManager.logUser(newUser);
     }
+
+    @PostMapping(path="/logOut")
+    public String logOut(){
+
+        return userManager.logOut();
+    }
+
 
 }
 

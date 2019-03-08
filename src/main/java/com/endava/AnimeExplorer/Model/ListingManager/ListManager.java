@@ -36,6 +36,8 @@ public class ListManager {
 
             case 3:
                 return addFavorite(userId, currentRequest.getAnimeId());
+            case 4:
+                return deleteFavorite(userId, currentRequest.getAnimeId());
 
 
         }
@@ -53,10 +55,16 @@ public class ListManager {
         boolean exists = result.isPresent();
 
         if (exists) {
-
             AnimeEntry currentEntry = result.get();
+            if (currentEntry.isWatched() || currentEntry.isFavorite()) {
+                return new ResponseEntity<>(currentEntry, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else {
+                AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
+                newEntry.setPlanToWatch(true);
+                listRepository.save(newEntry);
+                return new ResponseEntity<>(newEntry, HttpStatus.OK);
+            }
 
-            return new ResponseEntity<>(currentEntry, HttpStatus.INTERNAL_SERVER_ERROR);
 
         } else {
             AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
@@ -77,11 +85,12 @@ public class ListManager {
 
         if (exists) {
             AnimeEntry currentEntry = result.get();
-
-            if (currentEntry.isWatched() || currentEntry.isFavorite()) {
+            
+            if (currentEntry.isFavorite()||qualification<=0||qualification>10) {
                 return new ResponseEntity<>(currentEntry, HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
                 currentEntry.setQualification(qualification);
+                currentEntry.setWatched(true);
                 currentEntry.setPlanToWatch(false);
                 listRepository.save(currentEntry);
                 return new ResponseEntity<>(currentEntry, HttpStatus.OK);
@@ -109,13 +118,11 @@ public class ListManager {
 
             AnimeEntry currentEntry = result.get();
             if (currentEntry.isWatched()) {
-                AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
-                newEntry.setFavorite(true);
-                listRepository.save(newEntry);
-                return new ResponseEntity<>(newEntry, HttpStatus.OK);
+                currentEntry.setFavorite(true);
+                listRepository.save(currentEntry);
+                return new ResponseEntity<>(currentEntry, HttpStatus.OK);
             } else {
-                AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
-                return new ResponseEntity<>(newEntry, HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(currentEntry, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } else {
@@ -125,6 +132,31 @@ public class ListManager {
 
     }
 
+
+    public ResponseEntity<AnimeEntry> deleteFavorite(int userId, int animeId) throws Exception {
+
+        Anime currentAnime = searchManager.getSingleEntry(animeId);
+
+        Optional<AnimeEntry> result = listRepository.findByUserIdAndAnimeId(userId, animeId);
+
+        boolean exists = result.isPresent();
+
+        if (exists) {
+            AnimeEntry currentEntry = result.get();
+            if (currentEntry.isFavorite()) {
+                currentEntry.setFavorite(false);
+                listRepository.save(currentEntry);
+                return new ResponseEntity<>(currentEntry, HttpStatus.OK);
+            } else {
+                AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
+                return new ResponseEntity<>(newEntry, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            AnimeEntry newEntry = createAnimeEntry(currentAnime, userId);
+            return new ResponseEntity<>(newEntry, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
     private AnimeEntry createAnimeEntry(Anime currentAnime, int userId) {
         AnimeEntry result = new AnimeEntry();

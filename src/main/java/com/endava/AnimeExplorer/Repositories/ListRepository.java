@@ -11,4 +11,7 @@ public interface ListRepository extends CrudRepository<AnimeEntry, Integer> {
 
      Optional<AnimeEntry> findByUserIdAndAnimeId(int userId,int animeId);
 
+     List<AnimeEntry> findByUserId(int userId);
+
+
 }

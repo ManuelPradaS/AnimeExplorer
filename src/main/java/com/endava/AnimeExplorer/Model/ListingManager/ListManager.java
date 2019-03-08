@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,7 +49,7 @@ public class ListManager {
     }
 
 
-    public ResponseEntity<AnimeEntry> addPlanTo(int userId, int animeId) throws Exception {
+    private ResponseEntity<AnimeEntry> addPlanTo(int userId, int animeId) throws Exception {
 
         Anime currentAnime = searchManager.getSingleEntry(animeId);
 
@@ -75,7 +78,7 @@ public class ListManager {
 
     }
 
-    public ResponseEntity<AnimeEntry> addWatched(int userId, int animeId, int qualification) throws Exception {
+    private ResponseEntity<AnimeEntry> addWatched(int userId, int animeId, int qualification) throws Exception {
 
         Anime currentAnime = searchManager.getSingleEntry(animeId);
 
@@ -85,8 +88,8 @@ public class ListManager {
 
         if (exists) {
             AnimeEntry currentEntry = result.get();
-            
-            if (currentEntry.isFavorite()||qualification<=0||qualification>10) {
+
+            if (currentEntry.isFavorite() || qualification <= 0 || qualification > 10) {
                 return new ResponseEntity<>(currentEntry, HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
                 currentEntry.setQualification(qualification);
@@ -108,7 +111,7 @@ public class ListManager {
 
     }
 
-    public ResponseEntity<AnimeEntry> addFavorite(int userId, int animeId) throws Exception {
+    private ResponseEntity<AnimeEntry> addFavorite(int userId, int animeId) throws Exception {
         Anime currentAnime = searchManager.getSingleEntry(animeId);
 
         Optional<AnimeEntry> result = listRepository.findByUserIdAndAnimeId(userId, animeId);
@@ -133,7 +136,7 @@ public class ListManager {
     }
 
 
-    public ResponseEntity<AnimeEntry> deleteFavorite(int userId, int animeId) throws Exception {
+    private ResponseEntity<AnimeEntry> deleteFavorite(int userId, int animeId) throws Exception {
 
         Anime currentAnime = searchManager.getSingleEntry(animeId);
 
@@ -156,6 +159,42 @@ public class ListManager {
             return new ResponseEntity<>(newEntry, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public ResponseEntity<MyLists> getLists(int userId) {
+        if (userId==0){
+            return new ResponseEntity<>(new MyLists(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }else {
+
+            List<String> plantoWatch = new ArrayList<>();
+            List<String> watched = new ArrayList<>();
+            List<String> favorites = new ArrayList<>();
+
+
+            for (AnimeEntry currentEntry : listRepository.findByUserId(userId)) {
+
+                if (currentEntry.isPlanToWatch()) {
+                    plantoWatch.add(currentEntry.getTitle());
+                }
+                if (currentEntry.isWatched()) {
+                    watched.add(currentEntry.getTitle());
+                }
+                if (currentEntry.isFavorite()) {
+                    favorites.add(currentEntry.getTitle());
+                }
+            }
+
+            String[] plantoWatchArray = plantoWatch.stream()
+                    .toArray(String[]::new);
+            String[] watchedArray = watched.stream()
+                    .toArray(String[]::new);
+            String[] favoritesArray = favorites.stream()
+                    .toArray(String[]::new);
+
+            MyLists lists = new MyLists(plantoWatchArray, watchedArray, favoritesArray);
+            return new ResponseEntity<>(lists, HttpStatus.OK);
+        }
     }
 
     private AnimeEntry createAnimeEntry(Anime currentAnime, int userId) {

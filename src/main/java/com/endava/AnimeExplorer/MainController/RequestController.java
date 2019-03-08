@@ -3,6 +3,7 @@ package com.endava.AnimeExplorer.MainController;
 import com.endava.AnimeExplorer.Model.ListingManager.AnimeEntry;
 import com.endava.AnimeExplorer.Model.ListingManager.AnimeToList;
 import com.endava.AnimeExplorer.Model.ListingManager.ListManager;
+import com.endava.AnimeExplorer.Model.ListingManager.MyLists;
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.UserManager.ProfileInformation;
@@ -95,6 +96,12 @@ public class RequestController {
         return listManager.add(currentInformation, userManager.getCurrentState().getUserId());
     }
 
+    @GetMapping(path = "/myLists", produces = "application/json")
+    public ResponseEntity<MyLists>
+    viewLists() {
+
+        return listManager.getLists(userManager.getCurrentState().getUserId());
+    }
 
 }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -12,6 +13,9 @@ import javax.persistence.Id;
 public class AnimeEntry {
 
     @Id
+    @GeneratedValue
+    private int entryId;
+
     private int userId;
 
     private int animeId;

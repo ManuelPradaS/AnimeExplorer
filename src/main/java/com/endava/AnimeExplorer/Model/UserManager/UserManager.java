@@ -126,7 +126,7 @@ public class UserManager {
             response.setDescription(currentUser.getDescription());
             response.setEmail(currentUser.getEmail());
 
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
 

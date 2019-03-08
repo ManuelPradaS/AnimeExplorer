@@ -1,5 +1,8 @@
 package com.endava.AnimeExplorer.MainController;
 
+import com.endava.AnimeExplorer.Model.ListingManager.AnimeEntry;
+import com.endava.AnimeExplorer.Model.ListingManager.AnimeToList;
+import com.endava.AnimeExplorer.Model.ListingManager.ListManager;
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.UserManager.ProfileInformation;
@@ -22,12 +25,15 @@ public class RequestController {
 
     private SearchManager searchManager;
     private UserManager userManager;
+    private ListManager listManager;
 
-    @Autowired
-    public RequestController(SearchManager searchManager, UserManager userManager) {
+    public RequestController(SearchManager searchManager, UserManager userManager, ListManager listManager) {
         this.searchManager = searchManager;
         this.userManager = userManager;
+        this.listManager = listManager;
     }
+
+    @Autowired
 
 
     @RequestMapping("/probe")
@@ -72,7 +78,7 @@ public class RequestController {
     public ResponseEntity<String>
     updateInformation(@RequestBody ProfileInformation currentInformation) {
 
-        return userManager.updateInformation(currentInformation,userManager.getCurrentState().getUserId());
+        return userManager.updateInformation(currentInformation, userManager.getCurrentState().getUserId());
     }
 
     @GetMapping(path = "/profile", produces = "application/json")
@@ -81,6 +87,14 @@ public class RequestController {
 
         return userManager.viewProfile(userManager.getCurrentState().getUserId());
     }
+
+    @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<AnimeEntry>
+    add(@RequestBody AnimeToList currentInformation) throws Exception {
+
+        return listManager.add(currentInformation, userManager.getCurrentState().getUserId());
+    }
+
 
 }
 

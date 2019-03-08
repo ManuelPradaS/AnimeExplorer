@@ -21,8 +21,12 @@ public class SearchManager {
 
     private static ArrayList<String> streamers = new ArrayList<>(Arrays.asList("Hulu", "Funimation", "Crunchyroll", "Viewster", "Daisuki", "Netflix", "HIDIVE", "TubiTV", "Amazon", "YouTube"));
     private static ArrayList<String> ageRatings = new ArrayList<>(Arrays.asList("G", "PG", "R", "R18"));
+    private static ArrayList<String> seasons = new ArrayList<>(Arrays.asList("spring", "summer", "fall", "winter"));
     private static ArrayList<String> genres;
 
+    public  ArrayList<String> getSeasons() {
+        return seasons;
+    }
     public  ArrayList<String> getGenres() {
         return genres;
     }
@@ -230,7 +234,7 @@ public class SearchManager {
 
     }
 
-    public Page requestSearch(String[] streamerChecksArray, String[] genreChecksArray) throws Exception{
+    public Page requestSearch(String[] streamerChecksArray, String[] genreChecksArray,String[] seasonsChecksArray) throws Exception{
 
         // String[] ageRatingChecksArray
 
@@ -240,6 +244,7 @@ public class SearchManager {
         //boolean filterByAgeRating=ageRatingChecks.size()>0;
 
         boolean filterByGenre=genreChecksArray!=null && genreChecksArray.length >0;
+        boolean filterBySeason=seasonsChecksArray!=null && seasonsChecksArray.length >0;
 
         ArrayList<String> filters =
                 new ArrayList<>();
@@ -255,6 +260,11 @@ public class SearchManager {
             List<String> genreChecks = Arrays.asList(genreChecksArray);
             filters.add(createSingleFilter("genres", genreChecks));
         }
+        if (filterBySeason){
+            List<String> seasonChecks = Arrays.asList(seasonsChecksArray);
+            filters.add(createSingleFilter("season", seasonChecks));
+        }
+
 
         String searchPage = makeRequest(filters);
 
@@ -263,16 +273,40 @@ public class SearchManager {
         return result;
     }
 
-    public  String internalRequest(String[] streamerChecksArray, String[] genreChecksArray) throws Exception{
+    public  String internalRequest(String[] streamerChecksArray, String[] genreChecksArray,String[] seasonsChecksArray) throws Exception{
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("?");
+
+        if (streamerChecksArray.length>0){
+            String streamersElements=getElements(streamerChecksArray);
+            builder.append("streamers=");
+            builder.append(streamersElements);
+        }
+        if (genreChecksArray.length>0){
+            String genresElements=getElements(genreChecksArray);
+
+            if (streamerChecksArray.length>0){
+                builder.append("&");
+            }
+            builder.append("genres=");
+            builder.append(genresElements);
+        }
+        if (seasonsChecksArray.length>0){
+            String sesonsElements=getElements(seasonsChecksArray);
+
+            if (genreChecksArray.length>0||streamerChecksArray.length>0){
+                builder.append("&");
+            }
+            builder.append("seasons=");
+            builder.append(sesonsElements);
+        }
 
 
-        String streamersElements=getElements(streamerChecksArray);
-        String genresElements=getElements(genreChecksArray);
+        String request = builder.toString();
 
-        String request = "?"+"streamers=" +streamersElements  + "&" + "genres=" + genresElements;
 
         //String encodedRequest = "?" + SearchManager.encodeLink(request);
-
         return request;
     }
 

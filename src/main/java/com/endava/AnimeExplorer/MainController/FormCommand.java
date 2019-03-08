@@ -9,6 +9,16 @@ public class FormCommand {
 
         String[]  ageRatings;
 
+        String[] seasons;
+
+    public String[] getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(String[] seasons) {
+        this.seasons = seasons;
+    }
+
     public String[] getAgeRatings() {
         return ageRatings;
     }

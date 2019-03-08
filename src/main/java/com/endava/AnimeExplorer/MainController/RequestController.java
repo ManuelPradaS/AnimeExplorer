@@ -45,14 +45,10 @@ public class RequestController {
 
     @RequestMapping("/search")
     public Page search(@RequestParam(value = "streamers", required = false) String[] streamers,
-                       @RequestParam(value = "genres", required = false) String[] genres) throws Exception {
+                       @RequestParam(value = "genres", required = false) String[] genres,
+                        @RequestParam(value = "seasons", required = false) String[] seasons) throws Exception {
 
-
-        System.out.println(Arrays.toString(streamers));
-
-        System.out.println(Arrays.toString(genres));
-
-        return searchManager.requestSearch(streamers, genres);
+        return searchManager.requestSearch(streamers, genres,seasons);
     }
 
 

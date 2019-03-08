@@ -21,11 +21,11 @@
         </li>
     </ul>
 
-    <p>AgeRatings:</p>
+    <p>Seasons:</p>
     <ul>
-        <li th:each="checkboxValue: ${ageRatings}">
-            <input type="checkbox" th:field="*{ageRatings}" th:value="${checkboxValue}" />
-            <label th:for="${#ids.prev('ageRatings')}" th:text="${checkboxValue}"></label>
+        <li th:each="checkboxValue: ${seasons}">
+            <input type="checkbox" th:field="*{seasons}" th:value="${checkboxValue}" />
+            <label th:for="${#ids.prev('seasons')}" th:text="${checkboxValue}"></label>
         </li>
     </ul>
 

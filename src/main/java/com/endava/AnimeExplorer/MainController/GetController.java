@@ -46,6 +46,13 @@ public class GetController {
                 .toArray(String[]::new);
         return ageRatingsArray;
     }
+    @ModelAttribute("seasons")
+    public String[] getSeasons() {
+
+        String[] seasonsArray = searchManager.getSeasons().stream()
+                .toArray(String[]::new);
+        return seasonsArray;
+    }
 
 
     @GetMapping("/searchForm")
@@ -66,7 +73,7 @@ public class GetController {
             RedirectAttributes ra) throws Exception {
 
 
-        String request = searchManager.internalRequest(command.getStreamers(), command.getGenres());
+        String request = searchManager.internalRequest(command.getStreamers(), command.getGenres(),command.getSeasons());
         System.out.println(request+"<-----");
 
         if (bindingResult.hasErrors()) {

@@ -1,5 +1,6 @@
 package com.endava.AnimeExplorer.MainController;
 
+import com.endava.AnimeExplorer.Model.AnimeManager.AnimeFileManager;
 import com.endava.AnimeExplorer.Model.ListingManager.AnimeEntry;
 import com.endava.AnimeExplorer.Model.ListingManager.AnimeToList;
 import com.endava.AnimeExplorer.Model.ListingManager.ListManager;
@@ -11,6 +12,7 @@ import com.endava.AnimeExplorer.Model.UserManager.User;
 import com.endava.AnimeExplorer.Model.UserManager.UserLogin;
 import com.endava.AnimeExplorer.Model.UserManager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,14 +29,16 @@ public class RequestController {
     private SearchManager searchManager;
     private UserManager userManager;
     private ListManager listManager;
+    private AnimeFileManager animeFileManager;
 
-    public RequestController(SearchManager searchManager, UserManager userManager, ListManager listManager) {
+
+    @Autowired
+    public RequestController(SearchManager searchManager, UserManager userManager, ListManager listManager, AnimeFileManager animeFileManager) {
         this.searchManager = searchManager;
         this.userManager = userManager;
         this.listManager = listManager;
+        this.animeFileManager = animeFileManager;
     }
-
-    @Autowired
 
 
     @RequestMapping("/probe")
@@ -46,9 +50,10 @@ public class RequestController {
     @RequestMapping("/search")
     public Page search(@RequestParam(value = "streamers", required = false) String[] streamers,
                        @RequestParam(value = "genres", required = false) String[] genres,
-                        @RequestParam(value = "seasons", required = false) String[] seasons) throws Exception {
+                       @RequestParam(value = "seasons", required = false) String[] seasons,
+                       @RequestParam(value = "averageRating", required = false) Double  averageRating) throws Exception {
 
-        return searchManager.requestSearch(streamers, genres,seasons);
+        return searchManager.requestSearch(streamers, genres, seasons,averageRating);
     }
 
 
@@ -98,6 +103,19 @@ public class RequestController {
 
         return listManager.getLists(userManager.getCurrentState().getUserId());
     }
+
+
+    @RequestMapping("/persist")
+    public ResponseEntity<String> persist(@RequestParam(value = "streamers", required = false) String[] streamers,
+                                          @RequestParam(value = "genres", required = false) String[] genres,
+                                          @RequestParam(value = "seasons", required = false) String[] seasons,
+                                          @RequestParam(value = "averageRating", required = false) Double  averageRating ) throws Exception {
+
+        animeFileManager.savePageResults(searchManager.requestSearch(streamers, genres, seasons,averageRating));
+
+        return new ResponseEntity<>("Your searching has been saved", HttpStatus.OK);
+    }
+
 
 }
 

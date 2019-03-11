@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class SearchManager {
 
-    private static final String root = "https://kitsu.io/api/edge/anime";
+    private static final String ROOT = "https://kitsu.io/api/edge/anime";
 
     private static ArrayList<String> fields = new ArrayList<>(Arrays.asList("id", "canonicalTitle"));
 
@@ -24,26 +24,27 @@ public class SearchManager {
     private static ArrayList<String> seasons = new ArrayList<>(Arrays.asList("spring", "summer", "fall", "winter"));
     private static ArrayList<String> genres;
 
-    public  ArrayList<String> getSeasons() {
+    public ArrayList<String> getSeasons() {
         return seasons;
     }
-    public  ArrayList<String> getGenres() {
+
+    public ArrayList<String> getGenres() {
         return genres;
     }
 
-    private  void setGenres(ArrayList<String> genres) {
+    private void setGenres(ArrayList<String> genres) {
         SearchManager.genres = genres;
     }
 
-    public  ArrayList<String> getStreamers() {
+    public ArrayList<String> getStreamers() {
         return streamers;
     }
 
-    public  ArrayList<String> getAgeRatings() {
+    public ArrayList<String> getAgeRatings() {
         return ageRatings;
     }
 
-    private  String decodeLink(String link) {
+    private String decodeLink(String link) {
 
         String decodedLink = null;
         try {
@@ -58,7 +59,7 @@ public class SearchManager {
         return decodedLink;
     }
 
-    public  String encodeLink(String link) {
+    public String encodeLink(String link) {
 
         String encodedLink = null;
         try {
@@ -74,13 +75,13 @@ public class SearchManager {
     }
 
 
-    private  boolean anyTrue(boolean[] array) {
+    private boolean anyTrue(boolean[] array) {
         for (boolean element : array) if (element) return true;
         return false;
     }
 
 
-    public  Anime getSingleEntry(int number) throws Exception {
+    public Anime getSingleEntry(int number) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -92,13 +93,13 @@ public class SearchManager {
 
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
-        String currentUrl = root + "/" + number;
+        String currentUrl = ROOT + "/" + number;
         ResponseEntity<Anime> animeEntry = restTemplate.exchange(currentUrl, HttpMethod.GET, entity, Anime.class);
 
         return animeEntry.getBody();
     }
 
-    public  Page getPageResults(String request) throws Exception {
+    public Page getPageResults(String request) throws Exception {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -111,7 +112,7 @@ public class SearchManager {
 
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
-        String link = root + request;
+        String link = ROOT + request;
         System.out.println(link);
 
         ResponseEntity<Page> pageResult = restTemplate.exchange(link, HttpMethod.GET, entity, Page.class);
@@ -119,8 +120,25 @@ public class SearchManager {
         return pageResult.getBody();
     }
 
+    private String createIntervalFilter(String filter, double lowerBound, double upperBound) {
 
-    private  String createSingleFilter(String filter, List<String> words) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("filter");
+        builder.append("[");
+        builder.append(filter);
+        builder.append("]");
+        builder.append("=");
+        builder.append(lowerBound);
+        builder.append("..");
+        builder.append(upperBound);
+
+        String intervalFilter = builder.toString();
+        return intervalFilter;
+    }
+
+
+    private String createSingleFilter(String filter, List<String> words) {
 
         String singleFilter = "filter" + "[" + filter + "]" + "=";
 
@@ -143,7 +161,7 @@ public class SearchManager {
 
     }
 
-    private  String createRequiredFields() {
+    private String createRequiredFields() {
 
         String requiredFields = "fields[anime]=";
 
@@ -166,22 +184,22 @@ public class SearchManager {
 
     }
 
-    private  String makeRequest(ArrayList<String> filters) {
+    private String makeRequest(ArrayList<String> filters) {
 
         String requiredFields = createRequiredFields();
 
         String request = "?";
 
-        request = request + requiredFields;
+        //request = request + requiredFields;
 
         for (String currentFilter : filters) {
-
+            
             request = request + "&" + currentFilter;
         }
         return request;
     }
 
-    private  PageGenres getPageGenresResults(String link) {
+    private PageGenres getPageGenresResults(String link) {
 
 
         RestTemplate restTemplate = new RestTemplate();
@@ -200,7 +218,7 @@ public class SearchManager {
         return genresResult.getBody();
     }
 
-    private  ArrayList<String> addGenres(ArrayList<String> genresList, String link) {
+    private ArrayList<String> addGenres(ArrayList<String> genresList, String link) {
 
         PageGenres currentPage = getPageGenresResults(link);
 
@@ -223,7 +241,7 @@ public class SearchManager {
         return genresList;
     }
 
-    private  void getAllGenres() {
+    private void getAllGenres() {
 
         ArrayList<String> emptyList = new
                 ArrayList<>();
@@ -234,68 +252,63 @@ public class SearchManager {
 
     }
 
-    public Page requestSearch(String[] streamerChecksArray, String[] genreChecksArray,String[] seasonsChecksArray) throws Exception{
+    public Page requestSearch(String[] streamerChecksArray, String[] genreChecksArray, String[] seasonsChecksArray, Double averageRating) throws Exception {
 
-        // String[] ageRatingChecksArray
-
-       // List<String> ageRatingChecks = Arrays.asList( ageRatingChecksArray );
-
-        boolean filterByStreamer=streamerChecksArray!=null && streamerChecksArray.length >0;
-        //boolean filterByAgeRating=ageRatingChecks.size()>0;
-
-        boolean filterByGenre=genreChecksArray!=null && genreChecksArray.length >0;
-        boolean filterBySeason=seasonsChecksArray!=null && seasonsChecksArray.length >0;
+        boolean filterByStreamer = streamerChecksArray != null && streamerChecksArray.length > 0;
+        boolean filterByGenre = genreChecksArray != null && genreChecksArray.length > 0;
+        boolean filterBySeason = seasonsChecksArray != null && seasonsChecksArray.length > 0;
+        boolean filterByAverageRating = averageRating != null;
 
         ArrayList<String> filters =
                 new ArrayList<>();
 
-        if (filterByStreamer){
+        if (filterByStreamer) {
             List<String> streamerChecks = Arrays.asList(streamerChecksArray);
-           filters.add(createSingleFilter("streamers", streamerChecks));
+            filters.add(createSingleFilter("streamers", streamerChecks));
         }
-//        if (false){
-//            filters.add(SearchManager.createSingleFilter("ageRatings", ageRatingChecks));
-//        }
-        if (filterByGenre){
+
+        if (filterByGenre) {
             List<String> genreChecks = Arrays.asList(genreChecksArray);
             filters.add(createSingleFilter("genres", genreChecks));
         }
-        if (filterBySeason){
+        if (filterBySeason) {
             List<String> seasonChecks = Arrays.asList(seasonsChecksArray);
             filters.add(createSingleFilter("season", seasonChecks));
         }
-
+        if (filterByAverageRating) {
+            filters.add(createIntervalFilter("averageRating", averageRating, 100));
+        }
 
         String searchPage = makeRequest(filters);
 
-        Page result =getPageResults(searchPage);
+        Page result = getPageResults(searchPage);
 
         return result;
     }
 
-    public  String internalRequest(String[] streamerChecksArray, String[] genreChecksArray,String[] seasonsChecksArray) throws Exception{
+    public String internalRequest(String[] streamerChecksArray, String[] genreChecksArray, String[] seasonsChecksArray) throws Exception {
 
         StringBuilder builder = new StringBuilder();
         builder.append("?");
 
-        if (streamerChecksArray.length>0){
-            String streamersElements=getElements(streamerChecksArray);
+        if (streamerChecksArray.length > 0) {
+            String streamersElements = getElements(streamerChecksArray);
             builder.append("streamers=");
             builder.append(streamersElements);
         }
-        if (genreChecksArray.length>0){
-            String genresElements=getElements(genreChecksArray);
+        if (genreChecksArray.length > 0) {
+            String genresElements = getElements(genreChecksArray);
 
-            if (streamerChecksArray.length>0){
+            if (streamerChecksArray.length > 0) {
                 builder.append("&");
             }
             builder.append("genres=");
             builder.append(genresElements);
         }
-        if (seasonsChecksArray.length>0){
-            String sesonsElements=getElements(seasonsChecksArray);
+        if (seasonsChecksArray.length > 0) {
+            String sesonsElements = getElements(seasonsChecksArray);
 
-            if (genreChecksArray.length>0||streamerChecksArray.length>0){
+            if (genreChecksArray.length > 0 || streamerChecksArray.length > 0) {
                 builder.append("&");
             }
             builder.append("seasons=");
@@ -310,16 +323,15 @@ public class SearchManager {
         return request;
     }
 
-    private  String getElements(String[] stringArray){
+    private String getElements(String[] stringArray) {
 
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i <stringArray.length ; i++) {
-            String value=stringArray[i];
-            if(i==stringArray.length-1){
+        for (int i = 0; i < stringArray.length; i++) {
+            String value = stringArray[i];
+            if (i == stringArray.length - 1) {
                 builder.append(value);
-            }
-            else{
+            } else {
                 builder.append(value);
                 builder.append(",");
             }
@@ -328,7 +340,7 @@ public class SearchManager {
         return elements;
     }
 
-    public  void init() {
+    public void init() {
 
         getAllGenres();
     }

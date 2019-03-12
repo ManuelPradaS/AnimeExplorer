@@ -21,6 +21,14 @@ public class AnimeFile {
     private String endDate;
     private String ageRating;
 
+    public int getEntryId() {
+        return entryId;
+    }
+
+    public void setEntryId(int entryId) {
+        this.entryId = entryId;
+    }
+
     public String getCanonicalTitle() {
         return canonicalTitle;
     }

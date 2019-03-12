@@ -5,6 +5,7 @@ import com.endava.AnimeExplorer.Model.ListingManager.AnimeEntry;
 import com.endava.AnimeExplorer.Model.ListingManager.AnimeToList;
 import com.endava.AnimeExplorer.Model.ListingManager.ListManager;
 import com.endava.AnimeExplorer.Model.ListingManager.MyLists;
+import com.endava.AnimeExplorer.Model.ReportGenerator.BatchLauncher;
 import com.endava.AnimeExplorer.Model.SearchingManager.Page;
 import com.endava.AnimeExplorer.Model.SearchingManager.SearchManager;
 import com.endava.AnimeExplorer.Model.UserManager.ProfileInformation;
@@ -30,15 +31,19 @@ public class RequestController {
     private UserManager userManager;
     private ListManager listManager;
     private AnimeFileManager animeFileManager;
-
+    private BatchLauncher batchLauncher;
 
     @Autowired
-    public RequestController(SearchManager searchManager, UserManager userManager, ListManager listManager, AnimeFileManager animeFileManager) {
+    public RequestController(SearchManager searchManager, UserManager userManager, ListManager listManager, AnimeFileManager animeFileManager, BatchLauncher batchLauncher) {
         this.searchManager = searchManager;
         this.userManager = userManager;
         this.listManager = listManager;
         this.animeFileManager = animeFileManager;
+        this.batchLauncher = batchLauncher;
     }
+
+
+
 
 
     @RequestMapping("/probe")
@@ -115,6 +120,18 @@ public class RequestController {
 
         return new ResponseEntity<>("Your searching has been saved", HttpStatus.OK);
     }
+
+
+    @RequestMapping("/save")
+    public ResponseEntity<String> persist() throws Exception {
+
+
+        batchLauncher.launchDatabaseToCsvFileJob();
+
+        return new ResponseEntity<>("SAVED", HttpStatus.OK);
+    }
+
+
 
 
 }

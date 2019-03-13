@@ -38,7 +38,7 @@ import java.util.Map;
 @EnableBatchProcessing
 public class H2DataBaseToCsvJob {
 
-
+    private static final String PROPERTY_CSV_EXPORT_FILE_HEADER = "database.to.csv.job.export.file.header";
     @Autowired
     private AnimeRepository animeRepository;
 
@@ -75,11 +75,13 @@ public class H2DataBaseToCsvJob {
 
         FlatFileItemWriter<AnimeFile> writer = new FlatFileItemWriter<>();
 
-
         writer.setResource(outputResource);
 
-
         writer.setAppendAllowed(true);
+
+        HeaderWriter headerWriter = new HeaderWriter("TITLE,AVERAGE RATING, START DATE, END_DATE, AGE_RATING");
+
+        writer.setHeaderCallback(headerWriter);
 
         writer.setLineAggregator(new DelimitedLineAggregator<AnimeFile>() {
             {

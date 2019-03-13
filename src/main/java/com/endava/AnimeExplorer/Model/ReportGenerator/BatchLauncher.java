@@ -41,19 +41,22 @@ public class BatchLauncher {
         this.jobLauncher = jobLauncher;
     }
 
-    public void launchDatabaseToCsvFileJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public void launchDatabaseToCsvFileJob(Double averageRating) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         LOGGER.info("Starting databaseToCsvFile job");
 
-        jobLauncher.run(job, newExecution());
+        jobLauncher.run(job, newExecution(averageRating));
 
         LOGGER.info("Stopping databaseToCsvFile job");
     }
 
-    private JobParameters newExecution() {
+    private JobParameters newExecution(Double averageRating) {
         Map<String, JobParameter> parameters = new HashMap<>();
 
         JobParameter parameter = new JobParameter(new Date());
         parameters.put("currentTime", parameter);
+
+        JobParameter processParameter = new JobParameter(averageRating);
+        parameters.put("averageRating",processParameter);
 
         return new JobParameters(parameters);
     }

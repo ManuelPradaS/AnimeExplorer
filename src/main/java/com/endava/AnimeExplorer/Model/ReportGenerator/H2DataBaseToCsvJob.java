@@ -62,25 +62,25 @@ public class H2DataBaseToCsvJob {
     }
 
     @Bean
-    ItemProcessor<AnimeFile, AnimeFile> databaseCsvItemProcessor() {
+    @StepScope
+    public ItemProcessor<AnimeFile, AnimeFile> databaseCsvItemProcessor() {
         return new AnimeFileProcessor();
     }
 
 
-    private Resource outputResource = new FileSystemResource("output/outputData.csv");
+    private Resource outputResource = new FileSystemResource("output/animeReport.csv");
 
     @Bean
     public FlatFileItemWriter<AnimeFile> writer() {
-        //Create writer instance
+
         FlatFileItemWriter<AnimeFile> writer = new FlatFileItemWriter<>();
 
-        //Set output file location
+
         writer.setResource(outputResource);
 
-        //All job repetitions should "append" to same output file
+
         writer.setAppendAllowed(true);
 
-        //Name field values sequence based on object properties
         writer.setLineAggregator(new DelimitedLineAggregator<AnimeFile>() {
             {
                 setDelimiter(",");

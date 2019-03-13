@@ -123,10 +123,10 @@ public class RequestController {
 
 
     @RequestMapping("/save")
-    public ResponseEntity<String> persist() throws Exception {
+    public ResponseEntity<String> save(@RequestParam(value="averageRating",required = false)Double averageRating) throws Exception {
 
 
-        batchLauncher.launchDatabaseToCsvFileJob();
+        batchLauncher.launchDatabaseToCsvFileJob(averageRating);
 
         return new ResponseEntity<>("SAVED", HttpStatus.OK);
     }

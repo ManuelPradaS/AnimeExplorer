@@ -16,38 +16,28 @@ import org.springframework.boot.CommandLineRunner;
 @ComponentScan({"com.endava.AnimeExplorer"})
 public class AnimeExplorer {
 
-	public static Logger getLog() {
-		return log;
-	}
+    public static Logger getLog() {
+        return log;
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        SpringApplication.run(AnimeExplorer.class, args);
+    }
 
-		SpringApplication.run(AnimeExplorer.class, args);
+    private static final Logger log = LoggerFactory.getLogger(AnimeExplorer.class);
 
-	}
-
-	private static final Logger log = LoggerFactory.getLogger(AnimeExplorer.class);
-
-	@Bean
-	public static RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
+    @Bean
+    public static RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
 
 
-	@Bean
-	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
-		return args -> {
-
-			System.out.println("Ready");
-		};
-	}
-
-
-
-
-
-
-
+    @Bean
+    public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
+        return args -> {
+            System.out.println("Ready");
+        };
+    }
 
 
 }

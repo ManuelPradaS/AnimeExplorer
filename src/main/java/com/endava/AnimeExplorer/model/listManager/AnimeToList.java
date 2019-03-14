@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnimeToList {
 
-
     private int animeId;
     private int request;
     private int qualification;

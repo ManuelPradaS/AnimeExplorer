@@ -8,7 +8,6 @@ public class AttributesSingle {
     private String endDate;
     private String ageRating;
 
-
     public String getStartDate() {
         return startDate;
     }
@@ -52,7 +51,5 @@ public class AttributesSingle {
     public AttributesSingle() {
 
     }
-
-
 
 }

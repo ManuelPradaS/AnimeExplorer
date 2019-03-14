@@ -17,7 +17,6 @@ public class AnimeFileManager implements IAnimeFileManager {
 
     public void savePageResults(Page page) {
         for (AnimeSingle currentEntry : page.getData()) {
-
             animeRepository.save(createAnimeFile(currentEntry));
         }
     }

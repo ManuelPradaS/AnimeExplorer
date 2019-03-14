@@ -1,14 +1,15 @@
 package com.endava.AnimeExplorer.model.searchManager;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Attributes {
+
     private String createdAt;
     private String updatedAt;
     private String slug;
     private String synopsis;
     private String canonicalTitle;
-
     private String name;
 
     public String getName() {
@@ -62,6 +63,5 @@ public class Attributes {
     public Attributes() {
 
     }
-
 
 }

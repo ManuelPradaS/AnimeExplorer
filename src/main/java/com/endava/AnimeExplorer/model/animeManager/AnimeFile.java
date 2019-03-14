@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-//@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnimeFile {
 

@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ProfileInformation {
 
     private String name;
-
     private String email;
-
     private String description;
 
     public String getName() {
@@ -22,7 +20,6 @@ public class ProfileInformation {
 
     public String getDescription() {
         return description;
-
     }
 
     public void setName(String name) {

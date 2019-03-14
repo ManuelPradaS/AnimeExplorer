@@ -6,7 +6,6 @@ public class Page {
     private Meta meta;
     private Links links;
 
-
     public AnimeSingle[] getData() {
         return data;
     }
@@ -30,6 +29,5 @@ public class Page {
     public void setLinks(Links links) {
         this.links = links;
     }
-
 
 }

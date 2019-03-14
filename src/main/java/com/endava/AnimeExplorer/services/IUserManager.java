@@ -8,11 +8,15 @@ import org.springframework.http.ResponseEntity;
 
 public interface IUserManager {
 
-     ResponseEntity<User> addUser(UserLogin newUser);
+    ResponseEntity<User> addUser(UserLogin newUser);
 
     ResponseEntity<UserLogin> logUser(UserLogin currentUser);
+
     String logOut();
+
     ResponseEntity<String> updateInformation(ProfileInformation currentInformation, int userId);
+
     ResponseEntity<ProfileInformation> viewProfile(int id);
+
     CurrentState getCurrentState();
 }

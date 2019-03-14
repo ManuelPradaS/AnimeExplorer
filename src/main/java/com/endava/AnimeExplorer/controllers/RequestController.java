@@ -35,14 +35,6 @@ public class RequestController {
         this.batchLauncher = batchLauncher;
     }
 
-    @RequestMapping("/search")
-    public Page search(@RequestParam(value = "streamers", required = false) String[] streamers,
-                       @RequestParam(value = "genres", required = false) String[] genres,
-                       @RequestParam(value = "seasons", required = false) String[] seasons,
-                       @RequestParam(value = "averageRating", required = false) Double averageRating) throws Exception {
-        return searchManager.requestSearch(streamers, genres, seasons, averageRating);
-    }
-
     @PostMapping(path = "/createUser", consumes = "application/json", produces = "application/json")
     public ResponseEntity<User> addUser(@RequestBody UserLogin newUser) {
         return userManager.addUser(newUser);
@@ -58,15 +50,15 @@ public class RequestController {
         return userManager.logOut();
     }
 
-    @PostMapping(path = "/updateInformation", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/updateUserInformation", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String>
-    updateInformation(@RequestBody ProfileInformation currentInformation) {
+    updateUserInformation(@RequestBody ProfileInformation currentInformation) {
         return userManager.updateInformation(currentInformation, userManager.getCurrentState().getUserId());
     }
 
-    @GetMapping(path = "/profile", produces = "application/json")
+    @GetMapping(path = "/userProfile", produces = "application/json")
     public ResponseEntity<ProfileInformation>
-    viewProfile() {
+    viewUserProfile() {
         return userManager.viewProfile(userManager.getCurrentState().getUserId());
     }
 
@@ -82,6 +74,13 @@ public class RequestController {
         return listManager.getLists(userManager.getCurrentState().getUserId());
     }
 
+    @RequestMapping("/search")
+    public Page search(@RequestParam(value = "streamers", required = false) String[] streamers,
+                       @RequestParam(value = "genres", required = false) String[] genres,
+                       @RequestParam(value = "seasons", required = false) String[] seasons,
+                       @RequestParam(value = "averageRating", required = false) Double averageRating) throws Exception {
+        return searchManager.requestSearch(streamers, genres, seasons, averageRating);
+    }
 
     @RequestMapping("/persist")
     public ResponseEntity<String> persist(@RequestParam(value = "streamers", required = false) String[] streamers,

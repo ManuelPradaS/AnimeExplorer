@@ -1,6 +1,5 @@
 package com.endava.AnimeExplorer.services;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -23,9 +22,7 @@ import java.util.Map;
 public class BatchLauncher implements IBatchLauncher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchLauncher.class);
-
     private final Job job;
-
     private final JobLauncher jobLauncher;
 
     @Autowired
@@ -36,21 +33,16 @@ public class BatchLauncher implements IBatchLauncher {
 
     public void launchDatabaseToCsvFileJob(Double averageRating) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         LOGGER.info("Starting databaseToCsvFile job");
-
         jobLauncher.run(job, newExecution(averageRating));
-
         LOGGER.info("Stopping databaseToCsvFile job");
     }
 
     private JobParameters newExecution(Double averageRating) {
         Map<String, JobParameter> parameters = new HashMap<>();
-
         JobParameter parameter = new JobParameter(new Date());
         parameters.put("currentTime", parameter);
-
         JobParameter processParameter = new JobParameter(averageRating);
-        parameters.put("averageRating",processParameter);
-
+        parameters.put("averageRating", processParameter);
         return new JobParameters(parameters);
     }
 

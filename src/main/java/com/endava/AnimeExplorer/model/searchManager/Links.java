@@ -24,5 +24,4 @@ public class Links {
         this.next = next;
     }
 
-
 }

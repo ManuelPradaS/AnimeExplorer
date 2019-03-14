@@ -1,4 +1,5 @@
 package com.endava.AnimeExplorer.model.searchManager;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,6 +18,5 @@ public class GenresAttribute {
     public GenresAttribute() {
 
     }
-
 
 }

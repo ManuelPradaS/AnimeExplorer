@@ -5,6 +5,8 @@ import com.endava.AnimeExplorer.model.searchManager.AnimeSingle;
 import com.endava.AnimeExplorer.model.searchManager.Page;
 
 public interface IAnimeFileManager {
+
     void savePageResults(Page page);
+
     AnimeFile createAnimeFile(AnimeSingle currentAnime);
 }

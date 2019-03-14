@@ -12,5 +12,4 @@ public class LinksSingle {
         this.self = self;
     }
 
-
 }

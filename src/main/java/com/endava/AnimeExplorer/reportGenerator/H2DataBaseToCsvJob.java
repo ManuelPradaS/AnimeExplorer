@@ -29,12 +29,11 @@ public class H2DataBaseToCsvJob {
 
     @Autowired
     private AnimeRepository animeRepository;
-
     @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+    private JobBuilderFactory jobBuilderFactory;
     @Autowired
-    public StepBuilderFactory stepBuilderFactory;
-
+    private StepBuilderFactory stepBuilderFactory;
+    private Resource outputResource = new FileSystemResource("output/animeReport.csv");
 
     @Bean(name = "animeFileReader")
     @StepScope
@@ -52,12 +51,8 @@ public class H2DataBaseToCsvJob {
         return new AnimeFileProcessor();
     }
 
-
-    private Resource outputResource = new FileSystemResource("output/animeReport.csv");
-
     @Bean
     public FlatFileItemWriter<AnimeFile> writer() {
-
         FlatFileItemWriter<AnimeFile> writer = new FlatFileItemWriter<>();
         writer.setResource(outputResource);
         writer.setAppendAllowed(true);
@@ -86,7 +81,6 @@ public class H2DataBaseToCsvJob {
                 .writer(writer())
                 .build();
     }
-
 
     @Bean
     public Job databaseToCsvFileJob() {

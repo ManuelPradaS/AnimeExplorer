@@ -3,7 +3,6 @@ package com.endava.AnimeExplorer.model.searchManager;
 public class PageGenres {
 
     private Genres[] data;
-
     private Meta meta;
     private Links links;
 
@@ -33,6 +32,5 @@ public class PageGenres {
 
     public PageGenres() {
     }
-
 
 }

@@ -16,20 +16,16 @@ public class User {
     @Id
     @GeneratedValue
     private int userId;
-
     @NotNull
     private String user;
-
     @NotNull
     private String password;
-
     @Column
     private String name;
     @Column
     private String email;
     @Column
     private String description;
-
 
     public String getUser() {
         return user;

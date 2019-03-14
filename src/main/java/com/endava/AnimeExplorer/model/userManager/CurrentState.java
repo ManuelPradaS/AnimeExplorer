@@ -2,10 +2,9 @@ package com.endava.AnimeExplorer.model.userManager;
 
 public class CurrentState {
 
-    private int userId=0;
-    private String userName="none";
-    private boolean userActive=false;
-
+    private int userId = 0;
+    private String userName = "none";
+    private boolean userActive = false;
 
     public int getUserId() {
         return userId;

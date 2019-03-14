@@ -7,7 +7,6 @@ import java.io.Writer;
 
 public class HeaderWriter implements FlatFileHeaderCallback {
 
-
     private final String header;
 
     HeaderWriter(String header) {

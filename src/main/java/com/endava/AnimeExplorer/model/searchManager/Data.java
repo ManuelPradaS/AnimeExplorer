@@ -1,8 +1,10 @@
 package com.endava.AnimeExplorer.model.searchManager;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Data {
+
     private int id;
     private String type;
     private Attributes attributes;
@@ -32,8 +34,6 @@ public class Data {
     }
 
     public Data() {
-
     }
-
 
 }
